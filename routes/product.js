@@ -53,4 +53,17 @@ router.get("/:id", async (req,res) => {
     }
 });
 
+router.delete("/:id", async (req,res) => {
+    try {
+        const product = await Product.destroy({where: {id: req.params.id}});
+        if(!product) {
+            return res.status(404).json("Product doesn't exist");
+        }
+
+        return res.status(200).json("Product deleted successfully");
+    } catch (e) {
+        return res.status(400).json({error: e});
+    }
+})
+
 module.exports= router;
