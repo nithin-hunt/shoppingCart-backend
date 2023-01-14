@@ -29,6 +29,28 @@ router.post("/add", async(req,res) => {
     } catch(e) {
         return res.status(400).json({error: e});
     }
-})
+});
+
+router.get("/", async (req,res) => {
+    try {
+        const products = await Product.findAll();
+        return res.status(200).json(products);
+    } catch (e) {
+        return res.status(400).json({error: e});
+    }
+});
+
+router.get("/:id", async (req,res) => {
+    try {
+        const product = await Product.findOne({where: {id: req.params.id}});
+        if(!product) {
+            return res.status(404).json("No product found");
+        }
+
+        return res.status(200).json(product);
+    } catch (e) {
+        return res.status(400).json({error: e});
+    }
+});
 
 module.exports= router;
