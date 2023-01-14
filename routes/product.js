@@ -53,6 +53,24 @@ router.get("/:id", async (req,res) => {
     }
 });
 
+router.put("/:id", async (req,res) => {
+    try {
+        const product = await Product.findOne({where: {id: req.params.id}});
+        if(!product) {
+            return res.status(404).json("Product doesn't exist");
+        }
+
+        const {name, description, productImage, date, brand, cost} = req.body;
+        await Product.update({name, description, productImage, date, brand, cost}, {where: {id: req.params.id}});
+
+        const updatedProduct = await Product.findOne({where: {id: req.params.id}});
+        return res.status(200).json(updatedProduct); 
+
+    } catch (e) {
+        return res.status(400).json({error: e});
+    }
+})
+
 router.delete("/:id", async (req,res) => {
     try {
         const product = await Product.destroy({where: {id: req.params.id}});
